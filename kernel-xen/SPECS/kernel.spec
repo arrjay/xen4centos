@@ -299,6 +299,7 @@ ExclusiveOS: Linux
 #
 # List the packages used during the kernel build
 #
+BuildRequires: bsdtar
 BuildRequires: module-init-tools, patch >= 2.5.4, bash >= 2.03, sh-utils, tar
 BuildRequires: xz, findutils, gzip, m4, perl, make >= 3.78, diffutils, gawk
 BuildRequires: gcc >= 3.4.2, binutils >= 2.12, redhat-rpm-config >= 9.1.0-55
@@ -336,7 +337,7 @@ BuildRequires: rpm-build >= 4.9.0-1, elfutils >= 0.153-1
 BuildRequires: glibc-static
 %endif
 
-Source0: linux-%{rpmversion}-%{pkgrelease}.tar.xz
+Source0: kernel-%{rpmversion}-%{pkgrelease}.src.rpm
 
 Source1: Makefile.common
 
@@ -345,16 +346,12 @@ Source10: sign-modules
 Source11: x509.genkey
 Source12: extra_certificates
 %if %{?released_kernel}
-Source13: centos.cer
 Source14: secureboot.cer
 %define pesign_name redhatsecureboot301
 %else
-Source13: centos.cer
 Source14: secureboot.cer
 %define pesign_name redhatsecureboot003
 %endif
-Source15: centos-ldup.x509
-Source16: centos-kpatch.x509
 
 Source18: check-kabi
 
@@ -362,8 +359,6 @@ Source20: Module.kabi_x86_64
 Source21: Module.kabi_ppc64
 Source22: Module.kabi_ppc64le
 Source23: Module.kabi_s390x
-
-Source25: kernel-abi-whitelists-%{distro_build}.tar.bz2
 
 Source50: kernel-%{version}-x86_64.config
 Source51: kernel-%{version}-x86_64-debug.config
@@ -686,7 +681,8 @@ ApplyOptionalPatch()
   fi
 }
 
-%setup -q -n kernel-%{rheltarball} -c
+#%setup -q -n kernel-%{rheltarball} -c
+bsdtar xf %{SOURCE0} -O linux-%{rheltarball}.tar.xz | bsdtar xf -
 mv linux-%{rheltarball} linux-%{KVRA}
 cd linux-%{KVRA}
 
@@ -814,8 +810,8 @@ BuildKernel() {
 
     cp %{SOURCE11} .	# x509.genkey
     cp %{SOURCE12} .	# extra_certificates
-    cp %{SOURCE15} .	# rheldup3.x509
-    cp %{SOURCE16} .	# rhelkpatch1.x509
+    bsdtar xf %{SOURCE0} centos-ldup.x509 	# rheldup3.x509
+    bsdtar xf %{SOURCE0} centos-kpatch.x509	# rhelkpatch1.x509
 
     cp configs/$Config .config
 
@@ -1221,7 +1217,7 @@ INSTALL_KABI_PATH=$RPM_BUILD_ROOT/lib/modules/
 mkdir -p $INSTALL_KABI_PATH
 
 # install kabi releases directories
-tar xjvf %{SOURCE25} -C $INSTALL_KABI_PATH
+bsdtar xf %{SOURCE0} -O kernel-abi-whitelists-%{distro_build}.tar.bz2 | tar xjvf - -C $INSTALL_KABI_PATH
 %endif  # with_kernel_abi_whitelists
 
 %if %{with_perf}
