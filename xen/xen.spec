@@ -372,9 +372,9 @@ cp -v %{SOURCE21} xen/.config
 %endif
 %if %build_efi
 %ifarch x86_64
-%define efi_flags LD_EFI=/usr/x86_64-w64-mingw32/bin/ld
+%define efi_flags LD_EFI=/usr/x86_64-w64-mingw32/bin/ld EFI_VENDOR=centos
 %endif
-mkdir -p dist/install/boot/efi/efi/fedora
+mkdir -p dist/install/boot/efi/efi/centos
 %endif
 %if %(test -f /usr/share/seabios/bios-256k.bin && echo 1|| echo 0)
 %define seabiosloc /usr/share/seabios/bios-256k.bin
@@ -417,7 +417,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_libdir}/ocaml/stublibs
 %endif
 %if %build_efi
-mkdir -p %{buildroot}/boot/efi/efi/fedora
+mkdir -p %{buildroot}/boot/efi/efi/centos
 %endif
 %if %build_crosshyp
 XEN_TARGET_ARCH=x86_64 make DESTDIR=%{buildroot} %{?efi_flags}  prefix=/usr install-xen CC="/usr/bin/x86_64-linux-gnu-gcc"
@@ -590,8 +590,8 @@ if [ $1 == 1 -a -f /sbin/grub2-mkconfig ]; then
   if [ -f /boot/grub2/grub.cfg ]; then
     /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   fi
-  if [ -f /boot/efi/EFI/fedora/grub.cfg ]; then
-    /sbin/grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+  if [ -f /boot/efi/EFI/centos/grub.cfg ]; then
+    /sbin/grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
   fi
 fi
 
@@ -600,8 +600,8 @@ if [ -f /sbin/grub2-mkconfig ]; then
   if [ -f /boot/grub2/grub.cfg ]; then
     /sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   fi
-  if [ -f /boot/efi/EFI/fedora/grub.cfg ]; then
-    /sbin/grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+  if [ -f /boot/efi/EFI/centos/grub.cfg ]; then
+    /sbin/grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
   fi
 fi
 %endif
@@ -816,7 +816,7 @@ rm -rf %{buildroot}
 /boot/flask/xenpolicy*
 %endif
 %if %build_efi
-/boot/efi/EFI/fedora/*.efi
+/boot/efi/EFI/centos/*.efi
 %endif
 %endif
 
