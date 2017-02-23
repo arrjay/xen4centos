@@ -1,0 +1,86 @@
+--- xen-4.8.0/xen/include/asm-x86/x86_64/uaccess.h.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/xen/include/asm-x86/x86_64/uaccess.h	2017-02-11 22:55:19.112487384 +0000
+@@ -46,7 +46,7 @@
+     ((unsigned long)(addr) < HYPERVISOR_COMPAT_VIRT_START(d))
+ 
+ #define __compat_access_ok(d, addr, size) \
+-    __compat_addr_ok(d, (unsigned long)(addr) + ((size) ? (size) - 1 : 0))
++    __compat_addr_ok(d, (unsigned long)(addr) + ((size)>0 ? (size) - 1 : 0))
+ 
+ #define compat_access_ok(addr, size) \
+     __compat_access_ok(current->domain, addr, size)
+--- xen-4.8.0/xen/arch/arm/platforms/brcm.c.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/xen/arch/arm/platforms/brcm.c	2017-02-11 23:05:35.521865198 +0000
+@@ -271,7 +271,7 @@
+     return brcm_populate_plat_regs();
+ }
+ 
+-static const char const *brcm_dt_compat[] __initconst =
++static const char *brcm_dt_compat[] __initconst =
+ {
+     "brcm,bcm7445d0",
+     NULL
+--- xen-4.8.0/xen/arch/arm/platforms/rcar2.c.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/xen/arch/arm/platforms/rcar2.c	2017-02-12 15:59:23.574607734 +0000
+@@ -46,7 +46,7 @@
+     return 0;
+ }
+ 
+-static const char const *rcar2_dt_compat[] __initdata =
++static const char *rcar2_dt_compat[] __initdata =
+ {
+     "renesas,lager",
+     NULL
+--- xen-4.8.0/tools/misc/xenlockprof.c.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/tools/misc/xenlockprof.c	2017-02-12 15:53:26.585588293 +0000
+@@ -24,7 +24,7 @@
+     uint32_t           i, j, n;
+     uint64_t           time;
+     double             l, b, sl, sb;
+-    char               name[60];
++    char               name[90];
+     DECLARE_HYPERCALL_BUFFER(xc_lockprof_data_t, data);
+ 
+     if ( (argc > 2) || ((argc == 2) && (strcmp(argv[1], "-r") != 0)) )
+--- xen-4.8.0/tools/xenpmd/xenpmd.c.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/tools/xenpmd/xenpmd.c	2017-02-12 16:24:40.617934526 +0000
+@@ -87,12 +87,12 @@
+ 
+ #ifdef RUN_IN_SIMULATE_MODE
+     #define BATTERY_DIR_PATH "/tmp/battery"
+-    #define BATTERY_INFO_FILE_PATH "/tmp/battery/%s/info" 
+-    #define BATTERY_STATE_FILE_PATH "/tmp/battery/%s/state"
++    #define BATTERY_INFO_FILE_PATH "/tmp/battery/%.13s/info" 
++    #define BATTERY_STATE_FILE_PATH "/tmp/battery/%.12s/state"
+ #else
+     #define BATTERY_DIR_PATH "/proc/acpi/battery"
+-    #define BATTERY_INFO_FILE_PATH "/proc/acpi/battery/%s/info"
+-    #define BATTERY_STATE_FILE_PATH "/proc/acpi/battery/%s/state"
++    #define BATTERY_INFO_FILE_PATH "/proc/acpi/battery/%.7s/info"
++    #define BATTERY_STATE_FILE_PATH "/proc/acpi/battery/%.6s/state"
+ #endif
+ 
+ FILE *get_next_battery_file(DIR *battery_dir, 
+--- xen-4.8.0/tools/ocaml/libs/xc/xenctrl_stubs.c.orig	2016-12-05 12:03:27.000000000 +0000
++++ xen-4.8.0/tools/ocaml/libs/xc/xenctrl_stubs.c	2017-02-12 17:04:37.165498277 +0000
+@@ -62,7 +62,7 @@
+ 				 "%d: %s", errno, strerror(errno));
+ 		else
+ 			snprintf(error_str, sizeof(error_str),
+-				 "%d: %s: %s", error->code,
++				 "%d: %s: %.200s", error->code,
+ 				 xc_error_code_to_desc(error->code),
+ 				 error->message);
+ 	} else {
+--- xen-4.8.0/extras/mini-os/Makefile.orig	2016-09-28 12:09:38.000000000 +0100
++++ xen-4.8.0/extras/mini-os/Makefile	2017-02-15 21:15:19.340197960 +0000
+@@ -142,6 +142,9 @@
+ APP_LDLIBS += -lz
+ APP_LDLIBS += -lm
+ LDLIBS += -lc
++ifeq ($(MINIOS_TARGET_ARCH),x86_32)
++LDLIBS += -L$(shell dirname `gcc -m32 -print-libgcc-file-name`) -lgcc
++endif
+ endif
+ 
+ ifneq ($(APP_OBJS)-$(lwip),-y)
