@@ -1,0 +1,20 @@
+--- xen-4.7.0/tools/blktap2/control/tap-ctl-allocate.c.orig	2016-06-20 11:38:15.000000000 +0100
++++ xen-4.7.0/tools/blktap2/control/tap-ctl-allocate.c	2016-09-02 10:07:55.964084808 +0100
+@@ -36,6 +36,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/ioctl.h>
++#include <sys/sysmacros.h>
+ #include <linux/major.h>
+ 
+ #include "tap-ctl.h"
+--- xen-4.7.0/tools/libxl/libxl_internal.h.orig	2016-06-20 11:38:15.000000000 +0100
++++ xen-4.7.0/tools/libxl/libxl_internal.h	2016-09-02 17:35:24.853783711 +0100
+@@ -47,6 +47,7 @@
+ #include <sys/socket.h>
+ #include <sys/file.h>
+ #include <sys/ioctl.h>
++#include <sys/sysmacros.h>
+ 
+ #include <xenevtchn.h>
+ #include <xenstore.h>

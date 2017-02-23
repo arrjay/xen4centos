@@ -1,0 +1,24 @@
+--- xen-4.6.3/tools/xenstore/xs.c.orig	2016-06-20 13:08:22.000000000 +0100
++++ xen-4.6.3/tools/xenstore/xs.c	2016-07-10 21:05:57.082217329 +0100
+@@ -733,6 +733,7 @@
+ 	if (!h->read_thr_exists) {
+ 		sigset_t set, old_set;
+ 		pthread_attr_t attr;
++		int ptret;
+ 
+ 		if (pthread_attr_init(&attr) != 0) {
+ 			mutex_unlock(&h->request_mutex);
+@@ -747,7 +748,12 @@
+ 		sigfillset(&set);
+ 		pthread_sigmask(SIG_SETMASK, &set, &old_set);
+ 
+-		if (pthread_create(&h->read_thr, &attr, read_thread, h) != 0) {
++		ptret = pthread_create(&h->read_thr, &attr, read_thread, h);
++		if ( (ptret == EINVAL) && (pthread_attr_setstacksize(&attr, READ_THREAD_STACKSIZE + (8*1024)) == 0) ) {
++			/* have a second try with the bigger stacksize */
++			ptret = pthread_create(&h->read_thr, &attr, read_thread, h);
++		}
++		if (ptret != 0) {
+ 			pthread_sigmask(SIG_SETMASK, &old_set, NULL);
+ 			pthread_attr_destroy(&attr);
+ 			mutex_unlock(&h->request_mutex);

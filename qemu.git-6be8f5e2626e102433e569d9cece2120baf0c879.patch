@@ -1,0 +1,51 @@
+From 6be8f5e2626e102433e569d9cece2120baf0c879 Mon Sep 17 00:00:00 2001
+From: Prasad J Pandit <pjp@fedoraproject.org>
+Date: Mon, 24 Oct 2016 16:26:54 +0100
+Subject: [PATCH] timer: a9gtimer: remove loop to auto-increment comparator
+
+ARM A9MP processor has a peripheral timer with an auto-increment
+register, which holds an increment step value. A user could set
+this value to zero. When auto-increment control bit is enabled,
+it leads to an infinite loop in 'a9_gtimer_update' while
+updating comparator value. Remove this loop incrementing the
+comparator value.
+
+Reported-by: Li Qiang <liqiang6-s@360.cn>
+Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
+Message-id: 1476733226-11635-1-git-send-email-ppandit@redhat.com
+Reviewed-by: Peter Maydell <peter.maydell@linaro.org>
+Signed-off-by: Peter Maydell <peter.maydell@linaro.org>
+---
+ hw/timer/a9gtimer.c |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/hw/timer/a9gtimer.c b/hw/timer/a9gtimer.c
+index 772f85f..ce1dc63 100644
+--- a/hw/timer/a9gtimer.c
++++ b/hw/timer/a9gtimer.c
+@@ -82,15 +82,15 @@ static void a9_gtimer_update(A9GTimerState *s, bool sync)
+         if ((s->control & R_CONTROL_TIMER_ENABLE) &&
+                 (gtb->control & R_CONTROL_COMP_ENABLE)) {
+             /* R2p0+, where the compare function is >= */
+-            while (gtb->compare < update.new) {
++            if (gtb->compare < update.new) {
+                 DB_PRINT("Compare event happened for CPU %d\n", i);
+                 gtb->status = 1;
+-                if (gtb->control & R_CONTROL_AUTO_INCREMENT) {
+-                    DB_PRINT("Auto incrementing timer compare by %" PRId32 "\n",
+-                             gtb->inc);
+-                    gtb->compare += gtb->inc;
+-                } else {
+-                    break;
++                if (gtb->control & R_CONTROL_AUTO_INCREMENT && gtb->inc) {
++                    uint64_t inc =
++                        QEMU_ALIGN_UP(update.new - gtb->compare, gtb->inc);
++                    DB_PRINT("Auto incrementing timer compare by %"
++                                                        PRId64 "\n", inc);
++                    gtb->compare += inc;
+                 }
+             }
+             cdiff = (int64_t)gtb->compare - (int64_t)update.new + 1;
+-- 
+1.7.0.4
+
