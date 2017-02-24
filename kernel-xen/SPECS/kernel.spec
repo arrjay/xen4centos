@@ -1,11 +1,12 @@
 # We have to override the new %%install behavior because, well... the kernel is special.
 %global __spec_install_pre %{___build_pre}
+%global variant -xen
 
 Summary: The Linux kernel
 
 %define dist .el7
 
-# % define buildid .local
+%define buildid .xen
 
 # For a kernel released for public testing, released_kernel should be 1.
 # For internal testing builds during development, it should be 0.
@@ -382,6 +383,11 @@ Patch1000: debrand-single-cpu.patch
 Patch1001: debrand-rh_taint.patch
 Patch1002: debrand-rh-i686-cpu.patch
 
+# Xen functionality
+Patch1: xen-dom0.patch
+Patch2: xen-pcifront.patch
+Patch3: xen-blkback.patch
+
 BuildRoot: %{_tmppath}/kernel-%{KVRA}-root
 
 %description
@@ -695,6 +701,11 @@ ApplyOptionalPatch debrand-rh_taint.patch
 ApplyOptionalPatch debrand-rh-i686-cpu.patch
 
 # Any further pre-build tree manipulations happen here.
+
+# inject xen functionality here
+%patch1 -p2
+%patch2 -p2
+%patch3 -p2
 
 chmod +x scripts/checkpatch.pl
 
@@ -1546,6 +1557,9 @@ fi
 %kernel_variant_files %{with_kdump} kdump
 
 %changelog
+* Thu Feb 23 2017 RJ Bergeron <rbergero@gmail.com> - 3.10.0-514.6.2.el7.xen
+- Incorporate xen functionality
+
 * Wed Feb 22 2017 CentOS Sources <bugs@centos.org> - 3.10.0-514.6.2.el7
 - Apply debranding changes
 
