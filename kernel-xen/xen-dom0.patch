@@ -1,0 +1,12 @@
+diff -uNr kernel-3.10.0-514.6.1.el7.dist/linux-3.10.0-514.6.1.el7.x86_64/arch/x86/xen/Kconfig kernel-3.10.0-514.6.1.el7/linux-3.10.0-514.6.1.el7.x86_64/arch/x86/xen/Kconfig
+--- kernel-3.10.0-514.6.1.el7.dist/linux-3.10.0-514.6.1.el7.x86_64/arch/x86/xen/Kconfig	2016-12-10 10:27:13.000000000 -0500
++++ kernel-3.10.0-514.6.1.el7/linux-3.10.0-514.6.1.el7.x86_64/arch/x86/xen/Kconfig	2017-01-20 19:30:48.961962901 -0500
+@@ -15,7 +15,7 @@
+ 	  Xen hypervisor.
+ 
+ config XEN_DOM0
+-	def_bool n
++	def_bool y
+ 	depends on XEN && PCI_XEN && SWIOTLB_XEN
+ 	depends on X86_LOCAL_APIC && X86_IO_APIC && ACPI && PCI
+ 
