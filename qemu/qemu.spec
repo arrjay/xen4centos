@@ -74,7 +74,6 @@ Requires: %{name}-block-dmg = %{epoch}:%{version}-%{release}     \
 Requires: %{name}-block-gluster = %{epoch}:%{version}-%{release} \
 Requires: %{name}-block-iscsi = %{epoch}:%{version}-%{release}   \
 Requires: %{name}-block-nfs = %{epoch}:%{version}-%{release}     \
-Requires: %{name}-block-rbd = %{epoch}:%{version}-%{release}     \
 Requires: %{name}-block-ssh = %{epoch}:%{version}-%{release}
 
 # Temp hack for https://bugzilla.redhat.com/show_bug.cgi?id=1343892
@@ -92,7 +91,7 @@ Requires: %{name}-block-ssh = %{epoch}:%{version}-%{release}
 Summary: QEMU is a FAST! processor emulator
 Name: qemu
 Version: 2.8.0
-Release: 2%{?rcrel}%{?dist}
+Release: 2.1%{?rcrel}%{?dist}
 Epoch: 2
 License: GPLv2+ and LGPLv2+ and BSD
 Group: Development/Tools
@@ -184,8 +183,6 @@ BuildRequires: libseccomp-devel >= 2.3.0
 %endif
 # For network block driver
 BuildRequires: libcurl-devel
-# For rbd block driver
-BuildRequires: ceph-devel >= 0.61
 # We need both because the 'stap' binary is probed for by configure
 BuildRequires: systemtap
 BuildRequires: systemtap-sdt-devel
@@ -395,18 +392,6 @@ Requires: %{name}-common%{?_isa} = %{epoch}:%{version}-%{release}
 This package provides the additional NFS block driver for QEMU.
 
 Install this package if you want to access remote NFS storage.
-
-
-%package  block-rbd
-Summary: QEMU Ceph/RBD block driver
-Group: Development/Tools
-Requires: %{name}-common%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description block-rbd
-This package provides the additional Ceph/RBD block driver for QEMU.
-
-Install this package if you want to access remote Ceph volumes
-using the rbd protocol.
 
 
 %package  block-ssh
@@ -1500,10 +1485,6 @@ getent passwd qemu >/dev/null || \
 %{_libdir}/qemu/block-nfs.so
 
 
-%files block-rbd
-%{_libdir}/qemu/block-rbd.so
-
-
 %files block-ssh
 %{_libdir}/qemu/block-ssh.so
 
@@ -1947,6 +1928,9 @@ getent passwd qemu >/dev/null || \
 
 
 %changelog
+* Sat Feb 25 2017 RJ Bergeron <rbergero@gmail.com> - 2:2.8.0-2.1
+- Drob rbd/ceph support for an EL7 build
+
 * Mon Feb 20 2017 Daniel Berrange <berrange@redhat.com> - 2:2.8.0-2
 - Drop texi2html BR, since QEMU switched to using makeinfo back in 2010
 
