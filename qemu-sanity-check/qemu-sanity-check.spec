@@ -6,7 +6,7 @@
 
 Name:            qemu-sanity-check
 Version:         1.1.5
-Release:         5%{?dist}
+Release:         5.1%{?dist}
 Summary:         Simple qemu and Linux kernel sanity checker
 License:         GPLv2+
 
@@ -32,6 +32,9 @@ BuildRequires:   glibc-static
 # tests on ARM since qemu isn't likely to work.
 %ifarch %{ix86} x86_64
 BuildRequires:   qemu-system-x86
+%if 0%{?rhel} <= 7
+BuildRequires:   seabios-bin
+%endif
 %endif
 
 BuildRequires:   kernel
@@ -44,6 +47,9 @@ BuildRequires: grubby
 
 %ifarch %{ix86} x86_64
 Requires:        qemu-system-x86
+%if 0%{?rhel} <= 7
+BuildRequires:   seabios-bin
+%endif
 %endif
 %ifarch armv7hl
 Requires:        qemu-system-arm
@@ -125,6 +131,9 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 
 %changelog
+* Fri Feb 24 2017 RJ Bergeron <rbergero@gmail.com> - 1.1.5-5.1
+- EL7 reqs
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.5-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
