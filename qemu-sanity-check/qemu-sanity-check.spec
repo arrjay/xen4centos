@@ -131,7 +131,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 
 %changelog
-* Fri Feb 24 2017 RJ Bergeron <rbergero@gmail.com> - 1.1.5-5.1
+* Fri Feb 24 2017 RJ Bergeron <rbergero@gmail.com> 1.1.5-5.1
 - EL7 reqs
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.5-5
