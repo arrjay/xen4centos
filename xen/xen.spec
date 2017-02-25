@@ -41,7 +41,7 @@
 Summary: Xen is a virtual machine monitor
 Name:    xen
 Version: 4.8.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 Group:   Development/Libraries
 License: GPLv2+ and LGPLv2+ and BSD
 URL:     http://xen.org/
@@ -117,7 +117,10 @@ Patch57: xsa208-qemuu.patch
 Patch58: xen.gcc7.fix.patch
 Patch59: xsa207.patch
 Patch60: xsa209-qemut.patch
-Patch61: xsa209-qemuu.patch
+Patch61: xsa209-qemuu-0001-display-cirrus-ignore-source-pitch-value-as-needed-i.patch
+Patch62: xsa209-qemuu-0002-cirrus-add-blit_is_unsafe-call-to-cirrus_bitblt_cput.patch
+Patch63: xsa210.patch
+
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: transfig libidn-devel zlib-devel texi2html SDL-devel curl-devel
@@ -322,6 +325,7 @@ manage Xen virtual machines.
 %patch51 -p1
 %patch58 -p1
 %patch59 -p1
+%patch63 -p1
 
 # qemu-xen-traditional patches
 pushd tools/qemu-xen-traditional
@@ -859,6 +863,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Feb 25 2017 Michael Young <m.a.young@durham.ac.uk> - 4.8.0-6
+- update patches for XSA-209
+- arm: memory corruption when freeing p2m pages [XSA-210] (#1426327)
+
 * Wed Feb 22 2017 Michael Young <m.a.young@durham.ac.uk> - 4.8.0-5
 - cirrus_bitblt_cputovideo does not check if memory region is safe
 	[XSA-209, CVE-2017-2620] (#1425420)

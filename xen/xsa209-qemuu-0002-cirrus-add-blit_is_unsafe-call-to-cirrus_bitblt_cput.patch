@@ -1,5 +1,8 @@
+From 15268f91fbe75b38a851c458aef74e693d646ea5 Mon Sep 17 00:00:00 2001
 From: Gerd Hoffmann <kraxel@redhat.com>
-Subject: [PATCH 3/3] cirrus: add blit_is_unsafe call to cirrus_bitblt_cputovideo
+Date: Tue, 21 Feb 2017 10:54:59 -0800
+Subject: [PATCH 2/2] cirrus: add blit_is_unsafe call to
+ cirrus_bitblt_cputovideo
 
 CIRRUS_BLTMODE_MEMSYSSRC blits do NOT check blit destination
 and blit width, at all.  Oops.  Fix it.
@@ -27,10 +30,10 @@ Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/hw/display/cirrus_vga.c b/hw/display/cirrus_vga.c
-index 0e47cf8..a093dc8 100644
+index 34a6900..5901250 100644
 --- a/hw/display/cirrus_vga.c
 +++ b/hw/display/cirrus_vga.c
-@@ -899,6 +899,10 @@ static int cirrus_bitblt_cputovideo(CirrusVGAState * s)
+@@ -865,6 +865,10 @@ static int cirrus_bitblt_cputovideo(CirrusVGAState * s)
  {
      int w;
  
@@ -41,7 +44,7 @@ index 0e47cf8..a093dc8 100644
      s->cirrus_blt_mode &= ~CIRRUS_BLTMODE_MEMSYSSRC;
      s->cirrus_srcptr = &s->cirrus_bltbuf[0];
      s->cirrus_srcptr_end = &s->cirrus_bltbuf[0];
-@@ -924,6 +928,10 @@ static int cirrus_bitblt_cputovideo(CirrusVGAState * s)
+@@ -890,6 +894,10 @@ static int cirrus_bitblt_cputovideo(CirrusVGAState * s)
  	}
          s->cirrus_srccounter = s->cirrus_blt_srcpitch * s->cirrus_blt_height;
      }
@@ -53,5 +56,5 @@ index 0e47cf8..a093dc8 100644
      s->cirrus_srcptr_end = s->cirrus_bltbuf + s->cirrus_blt_srcpitch;
      cirrus_update_memory_access(s);
 -- 
-1.8.3.1
+2.1.4
 
