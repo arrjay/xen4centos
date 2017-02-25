@@ -1928,7 +1928,7 @@ getent passwd qemu >/dev/null || \
 
 
 %changelog
-* Sat Feb 25 2017 RJ Bergeron <rbergero@gmail.com> - 2:2.8.0-2.1
+* Sat Feb 25 2017 RJ Bergeron <rbergero@gmail.com> 2.8.0-2.1
 - Drob rbd/ceph support for an EL7 build
 
 * Mon Feb 20 2017 Daniel Berrange <berrange@redhat.com> - 2:2.8.0-2
