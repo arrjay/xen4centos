@@ -48,11 +48,17 @@ as an event loop, threads, dynamic loading, and an object system.
 %package devel
 Summary: A library of handy utility functions
 Group: Development/Libraries
-Obsoletes: glib2-static < 2.32.1-2
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 The glib2-devel package includes the header files for the GLib library.
+
+%package static
+Summary: glib static
+Requires: %{name}-devel = %{version}-%{release}
+
+%description static
+The %{name}-static subpackage contains static libraries for %{name}.
 
 %package doc
 Summary: A library of handy utility functions
@@ -82,7 +88,7 @@ autoreconf -i -f
 (if ! test -x configure; then NOCONFIGURE=1 ./autogen.sh; CONFIGFLAGS=--enable-gtk-doc; fi;
  %configure $CONFIGFLAGS \
            --enable-systemtap \
-           --disable-static
+           --enable-static
 )
 
 make %{?_smp_mflags}
@@ -198,7 +204,17 @@ gio-querymodules-%{__isa_bits} %{_libdir}/gio/modules
 %files fam
 %{_libdir}/gio/modules/libgiofam.so
 
+%files static
+%{_libdir}/libgio-2.0.a
+%{_libdir}/libglib-2.0.a
+%{_libdir}/libgmodule-2.0.a
+%{_libdir}/libgobject-2.0.a
+%{_libdir}/libgthread-2.0.a
+
 %changelog
+* Fri Feb 24 2017 RJ Bergeron <rbergero@gmail.com> - [2.46.2-4]
+- enable -static package
+
 * Wed Sep 14 2016 Kalev Lember <klember@redhat.com> - 2.46.2-4
 - Backport a patch to fix a segfault in file monitor code
 - Resolves: #1375753
