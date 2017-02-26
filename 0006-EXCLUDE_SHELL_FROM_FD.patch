@@ -1,0 +1,64 @@
+From: Gerd Hoffmann <kraxel@redhat.com>
+Date: Thu, 18 Feb 2016 10:52:44 +0100
+Subject: [PATCH] EXCLUDE_SHELL_FROM_FD
+
+---
+ OvmfPkg/OvmfPkgIa32.fdf    | 2 ++
+ OvmfPkg/OvmfPkgIa32X64.fdf | 2 ++
+ OvmfPkg/OvmfPkgX64.fdf     | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/OvmfPkg/OvmfPkgIa32.fdf b/OvmfPkg/OvmfPkgIa32.fdf
+index 2a5b211..ebdab17 100644
+--- a/OvmfPkg/OvmfPkgIa32.fdf
++++ b/OvmfPkg/OvmfPkgIa32.fdf
+@@ -281,11 +281,13 @@ INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+ 
+ INF  FatPkg/EnhancedFatDxe/Fat.inf
+ 
++!ifndef $(EXCLUDE_SHELL_FROM_FD)
+ !ifndef $(USE_OLD_SHELL)
+ INF  ShellPkg/Application/Shell/Shell.inf
+ !else
+ INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
+ !endif
++!endif
+ 
+ INF MdeModulePkg/Logo/LogoDxe.inf
+ 
+diff --git a/OvmfPkg/OvmfPkgIa32X64.fdf b/OvmfPkg/OvmfPkgIa32X64.fdf
+index 1c7df21..adf53f3 100644
+--- a/OvmfPkg/OvmfPkgIa32X64.fdf
++++ b/OvmfPkg/OvmfPkgIa32X64.fdf
+@@ -281,11 +281,13 @@ INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+ 
+ INF  FatPkg/EnhancedFatDxe/Fat.inf
+ 
++!ifndef $(EXCLUDE_SHELL_FROM_FD)
+ !ifndef $(USE_OLD_SHELL)
+ INF  ShellPkg/Application/Shell/Shell.inf
+ !else
+ INF  RuleOverride = BINARY USE = X64 EdkShellBinPkg/FullShell/FullShell.inf
+ !endif
++!endif
+ 
+ INF MdeModulePkg/Logo/LogoDxe.inf
+ 
+diff --git a/OvmfPkg/OvmfPkgX64.fdf b/OvmfPkg/OvmfPkgX64.fdf
+index 3bb11cb..edf1098 100644
+--- a/OvmfPkg/OvmfPkgX64.fdf
++++ b/OvmfPkg/OvmfPkgX64.fdf
+@@ -281,11 +281,13 @@ INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+ 
+ INF  FatPkg/EnhancedFatDxe/Fat.inf
+ 
++!ifndef $(EXCLUDE_SHELL_FROM_FD)
+ !ifndef $(USE_OLD_SHELL)
+ INF  ShellPkg/Application/Shell/Shell.inf
+ !else
+ INF  RuleOverride = BINARY EdkShellBinPkg/FullShell/FullShell.inf
+ !endif
++!endif
+ 
+ INF MdeModulePkg/Logo/LogoDxe.inf
+ 
