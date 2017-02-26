@@ -1,0 +1,52 @@
+From: Laszlo Ersek <lersek@redhat.com>
+Date: Sun, 8 Jul 2012 14:26:07 +0200
+Subject: [PATCH] OvmfPkg: enable DEBUG_VERBOSE
+
+Enable verbose debug logs.
+
+Signed-off-by: Laszlo Ersek <lersek@redhat.com>
+---
+ OvmfPkg/OvmfPkgIa32.dsc    | 2 +-
+ OvmfPkg/OvmfPkgIa32X64.dsc | 2 +-
+ OvmfPkg/OvmfPkgX64.dsc     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/OvmfPkg/OvmfPkgIa32.dsc b/OvmfPkg/OvmfPkgIa32.dsc
+index c0440d9..fa9661c 100644
+--- a/OvmfPkg/OvmfPkgIa32.dsc
++++ b/OvmfPkg/OvmfPkgIa32.dsc
+@@ -408,7 +408,7 @@
+   # DEBUG_VERBOSE   0x00400000  // Detailed debug messages that may
+   #                             // significantly impact boot performance
+   # DEBUG_ERROR     0x80000000  // Error
+-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
++  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8040004F
+ 
+ !ifdef $(SOURCE_DEBUG_ENABLE)
+   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x17
+diff --git a/OvmfPkg/OvmfPkgIa32X64.dsc b/OvmfPkg/OvmfPkgIa32X64.dsc
+index 6f94bc7..667584a 100644
+--- a/OvmfPkg/OvmfPkgIa32X64.dsc
++++ b/OvmfPkg/OvmfPkgIa32X64.dsc
+@@ -413,7 +413,7 @@
+   # DEBUG_VERBOSE   0x00400000  // Detailed debug messages that may
+   #                             // significantly impact boot performance
+   # DEBUG_ERROR     0x80000000  // Error
+-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
++  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8040004F
+ 
+ !ifdef $(SOURCE_DEBUG_ENABLE)
+   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x17
+diff --git a/OvmfPkg/OvmfPkgX64.dsc b/OvmfPkg/OvmfPkgX64.dsc
+index a92bf19..5ae8469 100644
+--- a/OvmfPkg/OvmfPkgX64.dsc
++++ b/OvmfPkg/OvmfPkgX64.dsc
+@@ -413,7 +413,7 @@
+   # DEBUG_VERBOSE   0x00400000  // Detailed debug messages that may
+   #                             // significantly impact boot performance
+   # DEBUG_ERROR     0x80000000  // Error
+-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8000004F
++  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8040004F
+ 
+ !ifdef $(SOURCE_DEBUG_ENABLE)
+   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x17

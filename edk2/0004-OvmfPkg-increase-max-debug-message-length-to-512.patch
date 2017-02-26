@@ -1,0 +1,22 @@
+From: Laszlo Ersek <lersek@redhat.com>
+Date: Thu, 20 Feb 2014 22:54:45 +0100
+Subject: [PATCH] OvmfPkg: increase max debug message length to 512
+
+Contributed-under: TianoCore Contribution Agreement 1.0
+---
+ OvmfPkg/Library/PlatformDebugLibIoPort/DebugLib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/OvmfPkg/Library/PlatformDebugLibIoPort/DebugLib.c b/OvmfPkg/Library/PlatformDebugLibIoPort/DebugLib.c
+index 44850a9..b6927d0 100644
+--- a/OvmfPkg/Library/PlatformDebugLibIoPort/DebugLib.c
++++ b/OvmfPkg/Library/PlatformDebugLibIoPort/DebugLib.c
+@@ -27,7 +27,7 @@
+ //
+ // Define the maximum debug and assert message length that this library supports
+ //
+-#define MAX_DEBUG_MESSAGE_LENGTH  0x100
++#define MAX_DEBUG_MESSAGE_LENGTH  0x200
+ 
+ /**
+   This constructor function does not have to do anything.
