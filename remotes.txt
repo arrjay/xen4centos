@@ -1,5 +1,7 @@
 dtc	https://src.fedoraproject.org/git/dtc.git (fetch)
 dtc	https://src.fedoraproject.org/git/dtc.git (push)
+edk2	https://src.fedoraproject.org/git/edk2.git (fetch)
+edk2	https://src.fedoraproject.org/git/edk2.git (push)
 glib2	https://git.centos.org/git/rpms/glib2 (fetch)
 glib2	https://git.centos.org/git/rpms/glib2 (push)
 kernel	https://git.centos.org/git/rpms/kernel (fetch)
